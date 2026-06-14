@@ -1,0 +1,134 @@
+[
+  {
+    "sprint_id": "SL-001",
+    "timestamp": "2026-06-14T22:53:30.646106",
+    "stories_planned": 2,
+    "stories_completed": 2,
+    "stories_rejected": 0,
+    "builds_total": 4,
+    "builds_success_first_attempt": 3,
+    "tests_total": 16,
+    "tests_passed": 15,
+    "coverage_percent": 82.5,
+    "defects_production": 0,
+    "escalations": 0,
+    "total_cost_usd": 0.11,
+    "cto_hours": 8.0,
+    "client_satisfaction": 8.0,
+    "delivery": {
+      "story_completion_rate": 100.0,
+      "first_build_success_rate": 75.0,
+      "test_pass_rate": 93.75,
+      "coverage_percent": 82.5,
+      "defect_escape_rate": 0.0
+    },
+    "economic": {
+      "cost_per_story": 0.06
+    },
+    "operational": {
+      "cto_hours": 8.0
+    },
+    "strategic": {
+      "client_satisfaction": 8.0
+    }
+  },
+  {
+    "sprint_id": "SL-001",
+    "timestamp": "2026-06-14T22:59:48.477398",
+    "stories_planned": 2,
+    "stories_completed": 2,
+    "stories_rejected": 0,
+    "builds_total": 4,
+    "builds_success_first_attempt": 3,
+    "tests_total": 16,
+    "tests_passed": 15,
+    "coverage_percent": 82.5,
+    "defects_production": 0,
+    "escalations": 0,
+    "total_cost_usd": 0.11,
+    "cto_hours": 8.0,
+    "client_satisfaction": 8.0,
+    "delivery": {
+      "story_completion_rate": 100.0,
+      "first_build_success_rate": 75.0,
+      "test_pass_rate": 93.75,
+      "coverage_percent": 82.5,
+      "defect_escape_rate": 0.0
+    },
+    "economic": {
+      "cost_per_story": 0.06
+    },
+    "operational": {
+      "cto_hours": 8.0
+    },
+    "strategic": {
+      "client_satisfaction": 8.0
+    }
+  },
+  {
+    "sprint_id": "SIM-001",
+    "timestamp": "2026-06-14T23:01:45.483732",
+    "stories_planned": 2,
+    "stories_completed": 2,
+    "stories_rejected": 0,
+    "builds_total": 4,
+    "builds_success_first_attempt": 3,
+    "tests_total": 16,
+    "tests_passed": 15,
+    "coverage_percent": 82.5,
+    "defects_production": 0,
+    "escalations": 0,
+    "total_cost_usd": 0.11,
+    "cto_hours": 8.0,
+    "client_satisfaction": 8.0,
+    "delivery": {
+      "story_completion_rate": 100.0,
+      "first_build_success_rate": 75.0,
+      "test_pass_rate": 93.75,
+      "coverage_percent": 82.5,
+      "defect_escape_rate": 0.0
+    },
+    "economic": {
+      "cost_per_story": 0.06
+    },
+    "operational": {
+      "cto_hours": 8.0
+    },
+    "strategic": {
+      "client_satisfaction": 8.0
+    }
+  },
+  {
+    "sprint_id": "SL-001",
+    "timestamp": "2026-06-14T23:06:07.096462",
+    "stories_planned": 2,
+    "stories_completed": 2,
+    "stories_rejected": 0,
+    "builds_total": 4,
+    "builds_success_first_attempt": 3,
+    "tests_total": 16,
+    "tests_passed": 15,
+    "coverage_percent": 82.5,
+    "defects_production": 0,
+    "escalations": 0,
+    "total_cost_usd": 0.11,
+    "cto_hours": 8.0,
+    "client_satisfaction": 8.0,
+    "delivery": {
+      "story_completion_rate": 100.0,
+      "first_build_success_rate": 75.0,
+      "test_pass_rate": 93.75,
+      "coverage_percent": 82.5,
+      "defect_escape_rate": 0.0
+    },
+    "economic": {
+      "cost_per_story": 0.06
+    },
+    "operational": {
+      "cto_hours": 8.0
+    },
+    "strategic": {
+      "client_satisfaction": 8.0
+    }
+  }
+]

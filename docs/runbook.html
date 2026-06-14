@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Native Framework — Runbook</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-dark: #0284c7;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #334155;
+            --radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--surface) 0%, #0f172a 100%);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--accent), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .progress-bar {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            z-index: 100;
+            margin-bottom: 2rem;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: var(--surface);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #818cf8);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            padding: 1.25rem 1.5rem;
+            background: var(--surface-light);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .section-header:hover {
+            background: #475569;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-number {
+            background: var(--accent);
+            color: var(--bg);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .section-toggle {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+        }
+
+        .section.open .section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .section-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section.open .section-body {
+            max-height: 2000px;
+        }
+
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checklist li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .checklist label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .checklist li.done label {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .code-block {
+            position: relative;
+            background: #020617;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: "Fira Code", "Consolas", "Monaco", monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--surface-light);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+            color: var(--bg);
+        }
+
+        .info-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--surface-light);
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-ready {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        @media (max-width: 640px) {
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .section-header h2 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🤖 AI-Native Framework Runbook</h1>
+        <p>Step-by-step guide to set up, run, and improve the Agile AI-Driven Software Development Framework</p>
+    </header>
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span>% complete</div>
+        </div>
+
+        <div class="section open" id="section-intro">
+            <div class="section-header" onclick="toggleSection('section-intro')">
+                <h2><span class="section-number">0</span> Project Overview</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <p>This framework replaces traditional human-engineered delivery teams with a governed team of specialized AI agents:</p>
+                    <div class="grid">
+                        <div class="card">
+                            <h3>👔 CEO</h3>
+                            <p>Strategic vision, final acceptance, client accountability</p>
+                        </div>
+                        <div class="card">
+                            <h3>💻 CTO</h3>
+                            <p>Technical governance, AI orchestration, escalation resolution</p>
+                        </div>
+                        <div class="card">
+                            <h3>🤖 AI Team</h3>
+                            <p>7 specialized agents executing compressed 1-week sprints</p>
+                        </div>
+                        <div class="card">
+                            <h3>🔄 Self-Learning</h3>
+                            <p>Automated loop improves prompts/skills after each sprint</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Key documents:</strong>
+                        <ul>
+                            <li><a href="13-master-plan.md">Master Plan</a> — strategic blueprint</li>
+                            <li><a href="14-master-execution-plan.md">Master Execution Plan</a> — operational playbook</li>
+                            <li><a href="16-how-to-use-this-project.md">How to Use This Project</a> — detailed user guide</li>
+                            <li><a href="18-self-learning-loop-implementation.md">Self-Learning Loop Guide</a> — loop implementation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-prereq">
+            <div class="section-header" onclick="toggleSection('section-prereq')">
+                <h2><span class="section-number">1</span> Prerequisites <span class="status-badge status-pending" id="badge-prereq">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <ul class="checklist">
+                        <li>
+                            <input type="checkbox" id="p1" onchange="updateProgress()">
+                            <label for="p1">Python 3.11+ installed</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="p2" onchange="updateProgress()">
+                            <label for="p2">Git installed</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="p3" onchange="updateProgress()">
+                            <label for="p3">Docker + Docker Compose installed</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="p4" onchange="updateProgress()">
+                            <label for="p4">LLM API accounts created (Anthropic, OpenAI, Moonshot/Kimi)</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="p5" onchange="updateProgress()">
+                            <label for="p5">Cloud account ready (AWS/GCP/Azure for production)</label>
+                        </li>
+                    </ul>
+
+                    <div class="warning-box">
+                        <strong>Important:</strong> Do not commit API keys to Git. The project uses <code>.env</code> for secrets.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-setup">
+            <div class="section-header" onclick="toggleSection('section-setup')">
+                <h2><span class="section-number">2</span> Initial Setup <span class="status-badge status-pending" id="badge-setup">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <ul class="checklist">
+                        <li>
+                            <input type="checkbox" id="s1" onchange="updateProgress()">
+                            <label for="s1">Clone the repository</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="s2" onchange="updateProgress()">
+                            <label for="s2">Run setup script</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="s3" onchange="updateProgress()">
+                            <label for="s3">Configure <code>.env</code> with API keys</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="s4" onchange="updateProgress()">
+                            <label for="s4">Verify setup by running tests</label>
+                        </li>
+                    </ul>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>git clone &lt;repository-url&gt;
+cd agile_ai_framework
+./scripts/setup.sh</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>cp .env.example .env
+# Edit .env with your API keys</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>python -m pytest tests/smoke tests/unit tests/learning -v</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-config">
+            <div class="section-header" onclick="toggleSection('section-config')">
+                <h2><span class="section-number">3</span> Provider Configuration <span class="status-badge status-pending" id="badge-config">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <p>Choose a provider strategy in <code>.pi/agent/AGENTS.md</code> and <code>src/config/providers.yaml</code>:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Strategy</th>
+                                <th>Coding Provider</th>
+                                <th>When to Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Default</td>
+                                <td>Claude 4 / GPT-4o</td>
+                                <td>Proven performance across diverse tasks</td>
+                            </tr>
+                            <tr>
+                                <td>Kimi-Optimized</td>
+                                <td>Kimi k2.6 / k2.5</td>
+                                <td>Maximize long-context coding economics</td>
+                            </tr>
+                            <tr>
+                                <td>Hybrid (recommended)</td>
+                                <td>Kimi for coding + Claude/o3 for planning</td>
+                                <td>Best balance of cost and reasoning quality</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Required API keys in .env
+ANTHROPIC_API_KEY=...
+OPENAI_API_KEY=...
+KIMI_API_KEY=...
+
+# Kimi endpoint
+KIMI_BASE_URL=https://api.moonshot.cn/v1
+KIMI_DEFAULT_MODEL=kimi-k2-6-latest</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-sprint">
+            <div class="section-header" onclick="toggleSection('section-sprint')">
+                <h2><span class="section-number">4</span> Run a Sprint Simulation <span class="status-badge status-pending" id="badge-sprint">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <p>Run a full AI-native sprint simulation without real LLM costs:</p>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>python -m src.simulations.sprint_simulation</pre>
+                    </div>
+
+                    <p>Expected output includes:</p>
+                    <ul>
+                        <li>PRD generation</li>
+                        <li>Sprint planning</li>
+                        <li>Architecture design</li>
+                        <li>Coder/Test/Review cycles</li>
+                        <li>Deployment preparation</li>
+                        <li>KPI dashboard and cost summary</li>
+                    </ul>
+
+                    <div class="success-box">
+                        <strong>Success criteria:</strong> Simulation completes with final phase = "complete" and no errors.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-learning">
+            <div class="section-header" onclick="toggleSection('section-learning')">
+                <h2><span class="section-number">5</span> Run the Self-Learning Loop <span class="status-badge status-pending" id="badge-learning">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <p>Run a sprint simulation followed by the self-learning loop:</p>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>python -m src.simulations.sprint_simulation --learning</pre>
+                    </div>
+
+                    <p>The loop performs these stages:</p>
+                    <ol>
+                        <li><strong>Observe:</strong> Collect feedback from sprint execution</li>
+                        <li><strong>Analyze:</strong> Identify recurring failure patterns and KPI gaps</li>
+                        <li><strong>Propose:</strong> Generate improvements to prompts/skills/governance</li>
+                        <li><strong>Approve:</strong> CTO approval workflow</li>
+                        <li><strong>Apply:</strong> Safely apply changes with backups</li>
+                        <li><strong>Validate:</strong> Re-run simulation and compare KPIs</li>
+                        <li><strong>Rollback:</strong> Revert changes that cause regression</li>
+                    </ol>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Run self-learning loop directly
+python -m src.learning.self_learning_loop</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-infra">
+            <div class="section-header" onclick="toggleSection('section-infra')">
+                <h2><span class="section-number">6</span> Start Local Infrastructure <span class="status-badge status-pending" id="badge-infra">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <p>Start the local development stack with Docker Compose:</p>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>cd infrastructure
+docker-compose up -d</pre>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Framework API</td>
+                                <td><a href="http://localhost:8000">http://localhost:8000</a></td>
+                            </tr>
+                            <tr>
+                                <td>ChromaDB</td>
+                                <td><a href="http://localhost:8001">http://localhost:8001</a></td>
+                            </tr>
+                            <tr>
+                                <td>LangGraph</td>
+                                <td><a href="http://localhost:8123">http://localhost:8123</a></td>
+                            </tr>
+                            <tr>
+                                <td>Grafana</td>
+                                <td><a href="http://localhost:3000">http://localhost:3000</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Start the API
+uvicorn src.api.main:app --reload</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-project">
+            <div class="section-header" onclick="toggleSection('section-project')">
+                <h2><span class="section-number">7</span> Create a Pilot Project <span class="status-badge status-pending" id="badge-project">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <ul class="checklist">
+                        <li>
+                            <input type="checkbox" id="proj1" onchange="updateProgress()">
+                            <label for="proj1">Copy project template</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="proj2" onchange="updateProgress()">
+                            <label for="proj2">Define business problem and PRD</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="proj3" onchange="updateProgress()">
+                            <label for="proj3">Score the project (scope clarity ≥4, tech stack familiarity ≥4)</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="proj4" onchange="updateProgress()">
+                            <label for="proj4">Run AI-native sprint</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="proj5" onchange="updateProgress()">
+                            <label for="proj5">Measure KPIs and convene governance committee</label>
+                        </li>
+                    </ul>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>cp -r templates/project-template pilots/my-new-project
+cd pilots/my-new-project</pre>
+                    </div>
+
+                    <div class="info-box">
+                        A sample pilot is available at <code>pilots/pilot-alpha/</code>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-monitor">
+            <div class="section-header" onclick="toggleSection('section-monitor')">
+                <h2><span class="section-number">8</span> Monitor KPIs <span class="status-badge status-pending" id="badge-monitor">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Main dashboard
+curl http://localhost:8000/dashboard
+
+# Learning loop status
+curl http://localhost:8000/learning/status
+curl http://localhost:8000/learning/proposals
+curl http://localhost:8000/learning/impact</pre>
+                    </div>
+
+                    <p>Key KPIs to track:</p>
+                    <ul>
+                        <li>Story completion rate ≥85%</li>
+                        <li>First-build success rate ≥80%</li>
+                        <li>Defect escape rate ≤0.15/story</li>
+                        <li>Cost per story <$10 (default) or <$8 (Kimi)</li>
+                        <li>Escalation rate ≤5%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-next">
+            <div class="section-header" onclick="toggleSection('section-next')">
+                <h2><span class="section-number">9</span> Next Steps <span class="status-badge status-pending" id="badge-next">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <ol>
+                        <li>Replace simulated agent outputs with real LLM API calls</li>
+                        <li>Provision production cloud infrastructure</li>
+                        <li>Connect Pi agent harness to the repository</li>
+                        <li>Run first real pilot project with a client</li>
+                        <li>Scale from 2 pilots → 5 concurrent projects → full portfolio</li>
+                        <li>Activate competitive pricing strategy</li>
+                    </ol>
+
+                    <div class="info-box">
+                        <strong>Need help?</strong> Review the framework documentation in <code>docs/</code> or check <code>governance/escalation-runbook.md</code> for incident response.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>AI-Native Development Framework — Version 1.0 — June 2026</p>
+    </footer>
+
+    <script>
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('open');
+        }
+
+        function copyCode(button) {
+            const pre = button.nextElementSibling;
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            const percent = Math.round((checked.length / checkboxes.length) * 100);
+
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressCount').textContent = percent;
+
+            // Update section badges
+            updateSectionBadge('section-prereq', 'badge-prereq');
+            updateSectionBadge('section-setup', 'badge-setup');
+            updateSectionBadge('section-config', 'badge-config');
+            updateSectionBadge('section-sprint', 'badge-sprint');
+            updateSectionBadge('section-learning', 'badge-learning');
+            updateSectionBadge('section-infra', 'badge-infra');
+            updateSectionBadge('section-project', 'badge-project');
+            updateSectionBadge('section-monitor', 'badge-monitor');
+            updateSectionBadge('section-next', 'badge-next');
+        }
+
+        function updateSectionBadge(sectionId, badgeId) {
+            const section = document.getElementById(sectionId);
+            const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+            if (checkboxes.length === 0) return;
+
+            const checked = section.querySelectorAll('input[type="checkbox"]:checked');
+            const badge = document.getElementById(badgeId);
+
+            if (checked.length === checkboxes.length) {
+                badge.textContent = 'Done';
+                badge.className = 'status-badge status-ready';
+            } else if (checked.length > 0) {
+                badge.textContent = 'In Progress';
+                badge.className = 'status-badge status-pending';
+            } else {
+                badge.textContent = 'Pending';
+                badge.className = 'status-badge status-pending';
+            }
+        }
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>

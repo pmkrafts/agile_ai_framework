@@ -1,0 +1,15 @@
+# Development dependencies
+
+ruff>=0.4.0
+mypy>=1.10.0
+black>=24.4.0
+isort>=5.13.0
+pre-commit>=3.7.0
+
+# Type stubs
+types-pyyaml>=6.0.0
+types-requests>=2.32.0
+
+# Jupyter for exploration
+jupyter>=1.0.0
+ipython>=8.24.0

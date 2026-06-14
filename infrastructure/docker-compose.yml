@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - VECTOR_DB_PROVIDER=chroma
+      - CHROMA_PERSIST_DIR=/data/chroma
+      - LOG_LEVEL=INFO
+    volumes:
+      - chroma-data:/data/chroma
+    depends_on:
+      - chroma
+    networks:
+      - ai-native-net
+
+  chroma:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+    networks:
+      - ai-native-net
+
+  langgraph:
+    image: langchain/langgraph-api:latest
+    ports:
+      - "8123:8000"
+    environment:
+      - LANGGRAPH_API_KEY=${LANGCHAIN_API_KEY}
+    networks:
+      - ai-native-net
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - ai-native-net
+
+volumes:
+  chroma-data:
+  grafana-data:
+
+networks:
+  ai-native-net:
+    driver: bridge

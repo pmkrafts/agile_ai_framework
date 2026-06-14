@@ -1,0 +1,80 @@
+# Provider configuration for AI-native development framework
+# Override values via environment variables or .env file
+
+providers:
+  anthropic:
+    name: Anthropic
+    api_key_env: ANTHROPIC_API_KEY
+    default_model: claude-4-sonnet-20250514
+    models:
+      claude-4-sonnet-20250514:
+        context_window: 200000
+        cost_per_1k_input: 0.003
+        cost_per_1k_output: 0.015
+      claude-4-opus-20250514:
+        context_window: 1000000
+        cost_per_1k_input: 0.015
+        cost_per_1k_output: 0.075
+
+  openai:
+    name: OpenAI
+    api_key_env: OPENAI_API_KEY
+    default_model: gpt-4o-2024-05-13
+    models:
+      gpt-4o-2024-05-13:
+        context_window: 128000
+        cost_per_1k_input: 0.005
+        cost_per_1k_output: 0.015
+      o3-2025-01-31:
+        context_window: 200000
+        cost_per_1k_input: 0.010
+        cost_per_1k_output: 0.040
+
+  kimi:
+    name: Moonshot AI
+    api_key_env: KIMI_API_KEY
+    base_url_env: KIMI_BASE_URL
+    base_url: https://api.moonshot.cn/v1
+    default_model: kimi-k2-6-latest
+    models:
+      kimi-k2-6-latest:
+        context_window: 256000
+        cost_per_1k_input: 0.005
+        cost_per_1k_output: 0.015
+      kimi-k2-5-latest:
+        context_window: 256000
+        cost_per_1k_input: 0.003
+        cost_per_1k_output: 0.009
+
+# Default agent-to-provider mapping
+agent_defaults:
+  product_agent:
+    provider: anthropic
+    model: claude-4-sonnet-20250514
+  planner_agent:
+    provider: openai
+    model: o3-2025-01-31
+  architect_agent:
+    provider: kimi
+    model: kimi-k2-6-latest
+  coder_agent:
+    provider: kimi
+    model: kimi-k2-6-latest
+  tester_agent:
+    provider: kimi
+    model: kimi-k2-5-latest
+  reviewer_agent:
+    provider: kimi
+    model: kimi-k2-6-latest
+  devops_agent:
+    provider: kimi
+    model: kimi-k2-5-latest
+
+# Framework settings
+framework:
+  min_test_coverage: 80
+  max_retry_attempts: 3
+  escalation_timeout_minutes: 30
+  sprint_budget_usd: 100
+  cost_alert_thresholds: [0.5, 0.75, 0.9, 1.0]
+  checkpoint_interval_seconds: 30
