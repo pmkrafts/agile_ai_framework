@@ -400,9 +400,48 @@
             </div>
         </div>
 
+        <div class="section open" id="section-install">
+            <div class="section-header" onclick="toggleSection('section-install')">
+                <h2><span class="section-number">1</span> Install <span class="status-badge status-pending" id="badge-install">Pending</span></h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <p>Install the framework with a single command. The installer sets up Python, dependencies, the environment file, and optionally starts local infrastructure.</p>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Linux / macOS
+curl -fsSL https://raw.githubusercontent.com/pmkrafts/agile_ai_framework/main/scripts/install.sh | bash</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Windows (PowerShell)
+iex (irm https://raw.githubusercontent.com/pmkrafts/agile_ai_framework/main/scripts/install.ps1)</pre>
+                    </div>
+
+                    <ul class="checklist">
+                        <li>
+                            <input type="checkbox" id="install1" onchange="updateProgress()">
+                            <label for="install1">Run the installer for your OS</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="install2" onchange="updateProgress()">
+                            <label for="install2">Edit <code>.env</code> with your API keys</label>
+                        </li>
+                    </ul>
+
+                    <div class="info-box">
+                        Prefer a local install? Clone the repo and run <code>./scripts/install.sh</code> (Linux/macOS) or <code>.\scripts\install.ps1</code> (Windows).
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="section" id="section-prereq">
             <div class="section-header" onclick="toggleSection('section-prereq')">
-                <h2><span class="section-number">1</span> Prerequisites <span class="status-badge status-pending" id="badge-prereq">Pending</span></h2>
+                <h2><span class="section-number">2</span> Prerequisites <span class="status-badge status-pending" id="badge-prereq">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -439,19 +478,21 @@
 
         <div class="section" id="section-setup">
             <div class="section-header" onclick="toggleSection('section-setup')">
-                <h2><span class="section-number">2</span> Initial Setup <span class="status-badge status-pending" id="badge-setup">Pending</span></h2>
+                <h2><span class="section-number">3</span> Initial Setup <span class="status-badge status-pending" id="badge-setup">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
                 <div class="section-content">
+                    <p>If you used the one-line installer, most of these steps are already done. Use this section to verify the setup and configure API keys.</p>
+
                     <ul class="checklist">
                         <li>
                             <input type="checkbox" id="s1" onchange="updateProgress()">
-                            <label for="s1">Clone the repository</label>
+                            <label for="s1">Repository cloned and installer run</label>
                         </li>
                         <li>
                             <input type="checkbox" id="s2" onchange="updateProgress()">
-                            <label for="s2">Run setup script</label>
+                            <label for="s2">Virtual environment created and dependencies installed</label>
                         </li>
                         <li>
                             <input type="checkbox" id="s3" onchange="updateProgress()">
@@ -465,9 +506,9 @@
 
                     <div class="code-block">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                        <pre>git clone &lt;repository-url&gt;
-cd agile_ai_framework
-./scripts/setup.sh</pre>
+                        <pre># If you skipped the one-line installer, run it now:
+./scripts/install.sh      # Linux / macOS
+.\scripts\install.ps1     # Windows</pre>
                     </div>
 
                     <div class="code-block">
@@ -486,7 +527,7 @@ cd agile_ai_framework
 
         <div class="section" id="section-config">
             <div class="section-header" onclick="toggleSection('section-config')">
-                <h2><span class="section-number">3</span> Provider Configuration <span class="status-badge status-pending" id="badge-config">Pending</span></h2>
+                <h2><span class="section-number">4</span> Provider Configuration <span class="status-badge status-pending" id="badge-config">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -537,7 +578,7 @@ KIMI_DEFAULT_MODEL=kimi-k2-6-latest</pre>
 
         <div class="section" id="section-sprint">
             <div class="section-header" onclick="toggleSection('section-sprint')">
-                <h2><span class="section-number">4</span> Run a Sprint Simulation <span class="status-badge status-pending" id="badge-sprint">Pending</span></h2>
+                <h2><span class="section-number">5</span> Run a Sprint Simulation <span class="status-badge status-pending" id="badge-sprint">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -568,7 +609,7 @@ KIMI_DEFAULT_MODEL=kimi-k2-6-latest</pre>
 
         <div class="section" id="section-learning">
             <div class="section-header" onclick="toggleSection('section-learning')">
-                <h2><span class="section-number">5</span> Run the Self-Learning Loop <span class="status-badge status-pending" id="badge-learning">Pending</span></h2>
+                <h2><span class="section-number">6</span> Run the Self-Learning Loop <span class="status-badge status-pending" id="badge-learning">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -602,7 +643,7 @@ python -m src.learning.self_learning_loop</pre>
 
         <div class="section" id="section-infra">
             <div class="section-header" onclick="toggleSection('section-infra')">
-                <h2><span class="section-number">6</span> Start Local Infrastructure <span class="status-badge status-pending" id="badge-infra">Pending</span></h2>
+                <h2><span class="section-number">7</span> Start Local Infrastructure <span class="status-badge status-pending" id="badge-infra">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -653,7 +694,7 @@ uvicorn src.api.main:app --reload</pre>
 
         <div class="section" id="section-project">
             <div class="section-header" onclick="toggleSection('section-project')">
-                <h2><span class="section-number">7</span> Create a Pilot Project <span class="status-badge status-pending" id="badge-project">Pending</span></h2>
+                <h2><span class="section-number">8</span> Create a Pilot Project <span class="status-badge status-pending" id="badge-project">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -696,7 +737,7 @@ cd pilots/my-new-project</pre>
 
         <div class="section" id="section-monitor">
             <div class="section-header" onclick="toggleSection('section-monitor')">
-                <h2><span class="section-number">8</span> Monitor KPIs <span class="status-badge status-pending" id="badge-monitor">Pending</span></h2>
+                <h2><span class="section-number">9</span> Monitor KPIs <span class="status-badge status-pending" id="badge-monitor">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -726,7 +767,7 @@ curl http://localhost:8000/learning/impact</pre>
 
         <div class="section" id="section-next">
             <div class="section-header" onclick="toggleSection('section-next')">
-                <h2><span class="section-number">9</span> Next Steps <span class="status-badge status-pending" id="badge-next">Pending</span></h2>
+                <h2><span class="section-number">10</span> Next Steps <span class="status-badge status-pending" id="badge-next">Pending</span></h2>
                 <span class="section-toggle">▼</span>
             </div>
             <div class="section-body">
@@ -780,6 +821,7 @@ curl http://localhost:8000/learning/impact</pre>
             document.getElementById('progressCount').textContent = percent;
 
             // Update section badges
+            updateSectionBadge('section-install', 'badge-install');
             updateSectionBadge('section-prereq', 'badge-prereq');
             updateSectionBadge('section-setup', 'badge-setup');
             updateSectionBadge('section-config', 'badge-config');

@@ -43,32 +43,42 @@ The framework replaces traditional human-engineered delivery teams with a govern
 
 ## Quick Start
 
-1. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   pip install -r requirements-dev.txt
-   ```
+### One-line install
 
-2. **Configure environment:**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API keys
-   ```
+**Linux / macOS**
+```bash
+curl -fsSL https://raw.githubusercontent.com/pmkrafts/agile_ai_framework/main/scripts/install.sh | bash
+```
 
-3. **Run setup script:**
-   ```bash
-   ./scripts/setup.sh
-   ```
+**Windows (PowerShell)**
+```powershell
+iex (irm https://raw.githubusercontent.com/pmkrafts/agile_ai_framework/main/scripts/install.ps1)
+```
 
-4. **Run a simulation sprint:**
+The installer clones the repository, creates a Python virtual environment, installs dependencies, copies `.env.example` to `.env`, runs smoke tests, and starts the local Docker Compose infrastructure.
+
+### Manual / local install
+
+```bash
+git clone https://github.com/pmkrafts/agile_ai_framework.git
+cd agile_ai_framework
+./scripts/install.sh      # Linux / macOS
+.\scripts\install.ps1     # Windows
+```
+
+### Next steps
+
+1. **Edit `.env`** with your API keys.
+2. **Run a simulation sprint:**
    ```bash
    python -m src.simulations.sprint_simulation
    ```
-
-5. **Run a simulation with self-learning loop:**
+3. **Run with the self-learning loop:**
    ```bash
    python -m src.simulations.sprint_simulation --learning
    ```
+
+See `docs/16-how-to-use-this-project.md` and `docs/14-master-execution-plan.md` for the full guide.
 
 ## Provider Strategy
 

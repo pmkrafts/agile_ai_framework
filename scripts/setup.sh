@@ -1,13 +1,24 @@
 #!/bin/bash
 set -e
 
+# Move to repository root regardless of where the script is invoked
+cd "$(dirname "$0")/.."
+
 echo "=================================="
 echo "AI-Native Framework Setup"
 echo "=================================="
 
 # Check Python version
-python_version=$(python3 --version 2&1 | awk '{print $2}')
+python_version=$(python3 --version 2>&1 | awk '{print $2}')
 echo "Python version: $python_version"
+
+# Enforce Python 3.11+
+python_major=$(echo "$python_version" | cut -d. -f1)
+python_minor=$(echo "$python_version" | cut -d. -f2)
+if [ "$python_major" -lt 3 ] || { [ "$python_major" -eq 3 ] && [ "$python_minor" -lt 11 ]; }; then
+    echo "❌ Python 3.11 or higher is required. Found $python_version"
+    exit 1
+fi
 
 # Create virtual environment if it doesn't exist
 if [ ! -d ".venv" ]; then
