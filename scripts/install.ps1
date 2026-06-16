@@ -43,9 +43,13 @@ Write-Host "==================================" -ForegroundColor Cyan
 # --- Execution policy check --------------------------------------------------
 
 $policy = Get-ExecutionPolicy
-if ($policy -eq "Restricted" -or $policy -eq "AllSigned") {
-    Write-Host "⚠️  Your PowerShell execution policy is '$policy', which may block this script." -ForegroundColor Yellow
-    Write-Host "   If the installer fails, run the following command first:" -ForegroundColor Yellow
+if ($policy -eq "Restricted") {
+    Write-Host "ℹ️  Your PowerShell execution policy is 'Restricted'. This installer avoids running local .ps1 files, so it should still work." -ForegroundColor DarkYellow
+    Write-Host "   If you later want to run local scripts, use:" -ForegroundColor DarkYellow
+    Write-Host "   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser" -ForegroundColor DarkYellow
+}
+elseif ($policy -eq "AllSigned") {
+    Write-Host "⚠️  Your PowerShell execution policy is 'AllSigned'. You may need to run:" -ForegroundColor Yellow
     Write-Host "   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser" -ForegroundColor Yellow
 }
 
@@ -104,20 +108,20 @@ if (-not (Test-InsideRepo)) {
 
 # --- Local environment setup -------------------------------------------------
 
+$venvPython = ".venv\Scripts\python.exe"
+$venvPip = ".venv\Scripts\pip.exe"
+
 Write-Host "Creating virtual environment..."
 & $pythonCmd -m venv .venv
 
-Write-Host "Activating virtual environment..."
-& .venv\Scripts\Activate.ps1
-
-Write-Host "Upgrading pip..."
-python -m pip install --upgrade pip
+Write-Host "Upgrading pip in virtual environment..."
+& $venvPython -m pip install --upgrade pip
 
 Write-Host "Installing production dependencies..."
-pip install -r requirements.txt
+& $venvPip install -r requirements.txt
 
 Write-Host "Installing development dependencies..."
-pip install -r requirements-dev.txt
+& $venvPip install -r requirements-dev.txt
 
 Write-Host "Creating project directories..."
 New-Item -ItemType Directory -Force -Path "data\chroma" | Out-Null
@@ -135,12 +139,16 @@ if (Get-Command pre-commit -ErrorAction SilentlyContinue) {
     Write-Host "Installing pre-commit hooks..."
     pre-commit install
 }
+elseif (Test-Path ".venv\Scripts\pre-commit.exe") {
+    Write-Host "Installing pre-commit hooks..."
+    & .venv\Scripts\pre-commit.exe install
+}
 
 # --- Smoke tests -------------------------------------------------------------
 
 Write-Host "Running smoke tests..."
 try {
-    python -m pytest tests\smoke -v
+    & $venvPython -m pytest tests\smoke -v
 }
 catch {
     Write-Host "⚠️  Smoke tests reported failures. The framework may still be usable." -ForegroundColor Yellow
